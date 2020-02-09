@@ -19,38 +19,37 @@ enum Entity {
     sessions = "sessions"
 }
 
-const getListRoute = (section: Section, version: Version, entity: Entity): string => `${section}/${version}/${entity}`;
+const getListRoute = (domain: string, section: Section, version: Version, entity: Entity): string => `${domain}/${section}/${version}/${entity}`;
+const getDetailRoute = (domain: string, section: Section, version: Version, entity: Entity): ((string) => string) => (id: string) => `${domain}/${section}/${version}/${entity}/${id}`;
 
-const getDetailRoute = (section: Section, version: Version, entity: Entity): ((string) => string) => (id: string) => `${section}/${version}/${entity}/${id}`;
-
-const getRoute = (section: Section, version: Version, entity: Entity) => ({
-    list: getListRoute(section, version, entity),
-    detail: getDetailRoute(section, version, entity)
+const getRoute = (domain: string, section: Section, version: Version, entity: Entity) => ({
+    list: getListRoute(domain, section, version, entity),
+    detail: getDetailRoute(domain, section, version, entity)
 });
 
-export const views = {
+export const getViewRoutes = (domain: string) => ({
     v1: {
-        users: getRoute(Section.views, Version.v1, Entity.users)
+        users: getRoute(domain, Section.views, Version.v1, Entity.users)
     }
-};
+});
 
-export const api = {
+export const getApiRoutes = (domain: string) => ({
     v1: {
-        users: getRoute(Section.api, Version.v1, Entity.users),
-        passwords: getRoute(Section.api, Version.v1, Entity.passwords),
-        roles: getRoute(Section.api, Version.v1, Entity.roles),
-        userRoles: getRoute(Section.api, Version.v1, Entity.userRoles),
-        phones: getRoute(Section.api, Version.v1, Entity.phones),
-        phoneConfirmations: getRoute(Section.api, Version.v1, Entity.phoneConfirmations),
-        emails: getRoute(Section.api, Version.v1, Entity.emails),
-        emailConfirmations: getRoute(Section.api, Version.v1, Entity.emailConfirmations),
-        sessions: getRoute(Section.api, Version.v1, Entity.sessions)
+        users: getRoute(domain, Section.api, Version.v1, Entity.users),
+        passwords: getRoute(domain, Section.api, Version.v1, Entity.passwords),
+        roles: getRoute(domain, Section.api, Version.v1, Entity.roles),
+        userRoles: getRoute(domain, Section.api, Version.v1, Entity.userRoles),
+        phones: getRoute(domain, Section.api, Version.v1, Entity.phones),
+        phoneConfirmations: getRoute(domain, Section.api, Version.v1, Entity.phoneConfirmations),
+        emails: getRoute(domain, Section.api, Version.v1, Entity.emails),
+        emailConfirmations: getRoute(domain, Section.api, Version.v1, Entity.emailConfirmations),
+        sessions: getRoute(domain, Section.api, Version.v1, Entity.sessions)
     }
-};
+});
 
-const routes = {
-    views,
-    api
-};
+const getRoutes = (domain: string) => ({
+    views: getViewRoutes(domain),
+    api: getApiRoutes(domain)
+});
 
-export default routes;
+export default getRoutes;
