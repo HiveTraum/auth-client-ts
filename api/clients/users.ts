@@ -2,6 +2,7 @@ import {inout} from "../../inout/inout";
 import ResponseStatus from "../../enums/responseStatus";
 import APIClient, {IAPIResponse} from "./basic/apiClient";
 import ICreateUserRequestV1 = inout.ICreateUserRequestV1;
+import {toHexString} from "../../functools/uuid";
 
 type CreateUserResponse = inout.GetUserResponseV1 | inout.CreateUserBadRequestV1
 type DeleteUserResponse = inout.GetUserResponseV1
@@ -9,7 +10,7 @@ type DeleteUserResponse = inout.GetUserResponseV1
 export interface IUserAPIClient {
     create(body: inout.CreateUserRequestV1, authToken?: string): Promise<IAPIResponse<CreateUserResponse>>
 
-    delete(id: string, authToken?: string): Promise<IAPIResponse<DeleteUserResponse>>
+    delete(id: string | Uint8Array, authToken?: string): Promise<IAPIResponse<DeleteUserResponse>>
 }
 
 class UserAPIClient extends APIClient implements IUserAPIClient {
@@ -26,7 +27,8 @@ class UserAPIClient extends APIClient implements IUserAPIClient {
         });
     }
 
-    async delete(id: string, authToken?: string): Promise<IAPIResponse<DeleteUserResponse>> {
+    async delete(id: string | Uint8Array, authToken?: string): Promise<IAPIResponse<DeleteUserResponse>> {
+        id = typeof id === "string" ? id : toHexString(id);
         return this.remove<DeleteUserResponse>({
             authToken,
             url: this.routes.api.v1.users.detail(id),
