@@ -19,8 +19,8 @@ test('Should create user, session and then delete user', async () => {
 
     await phoneConfirmationAPIClient.create({phone, phoneCountryCode});
     const user = await userAPIClient.create({
-        phone, password,
-        phoneCode: env.MockedConfirmationCode,
+        phone, password, phoneCountryCode,
+        phoneCode: env.MockedConfirmationCode
     });
 
     if (!(user.data instanceof GetUserResponseV1)) {
