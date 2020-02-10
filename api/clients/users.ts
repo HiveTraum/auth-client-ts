@@ -33,7 +33,7 @@ class UserAPIClient extends APIClient implements IUserAPIClient {
             authToken,
             url: this.routes.api.v1.users.detail(id),
             options: {
-                [ResponseStatus.NoContent]: inout.GetUserResponseV1,
+                [ResponseStatus.Ok]: inout.GetUserResponseV1,
                 [ResponseStatus.Forbidden]: null
             }
         })

@@ -37,5 +37,5 @@ test('Should create user, session and then delete user', async () => {
     const badRequestResponseV1 = data as inout.CreateUserBadRequestV1;
     expect(badRequestResponseV1.password).toHaveLength(1);
     const deletedUser = await userAPIClient.delete(user.data.id, globalSession.data.accessToken);
-    expect(deletedUser.status).toEqual(ResponseStatus.NoContent);
+    expect(deletedUser.status).toEqual(ResponseStatus.Ok);
 });
